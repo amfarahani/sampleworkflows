@@ -1,0 +1,39 @@
+name: 02 - Env Variable Scopes
+
+on:
+  push:
+  workflow_dispatch:
+
+env:
+  LEVEL: workflow
+  SHARED: workflow_value
+
+jobs:
+  env_demo:
+    runs-on: ubuntu-latest
+    env:
+      LEVEL: job
+      SHARED: job_value
+
+    steps:
+      - name: Show env values (job level)
+        run: |
+          echo "LEVEL (shell)  = $LEVEL"
+          echo "SHARED (shell) = $SHARED"
+          echo "LEVEL (expr)   = ${{ env.LEVEL }}"
+          echo "SHARED (expr)  = ${{ env.SHARED }}"
+
+      - name: Override env at step level
+        env:
+          LEVEL: step
+          SHARED: step_value
+        run: |
+          echo "LEVEL (shell)  = $LEVEL"
+          echo "SHARED (shell) = $SHARED"
+          echo "LEVEL (expr)   = ${{ env.LEVEL }}"
+          echo "SHARED (expr)  = ${{ env.SHARED }}"
+
+      - name: Back to job level after step override
+        run: |
+          echo "LEVEL (shell)  = $LEVEL"
+          echo "SHARED (shell) = $SHARED"
