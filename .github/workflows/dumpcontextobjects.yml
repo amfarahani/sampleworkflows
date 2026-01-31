@@ -1,0 +1,39 @@
+name: 01 - Dump Contexts
+run-name: Dump contexts by ${{ github.actor }}
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print basic scalar context values
+        run: |
+          echo "event_name = ${{ github.event_name }}"
+          echo "repository = ${{ github.repository }}"
+          echo "ref        = ${{ github.ref }}"
+          echo "sha        = ${{ github.sha }}"
+          echo "actor      = ${{ github.actor }}"
+          echo "runner.os  = ${{ runner.os }}"
+
+      - name: Dump github context (JSON)
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - name: Dump runner context (JSON)
+        env:
+          RUNNER_CONTEXT: ${{ toJson(runner) }}
+        run: echo "$RUNNER_CONTEXT"
+
+      - name: Dump job context (JSON)
+        env:
+          JOB_CONTEXT: ${{ toJson(job) }}
+        run: echo "$JOB_CONTEXT"
+
+      - name: Dump steps context (JSON)
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
