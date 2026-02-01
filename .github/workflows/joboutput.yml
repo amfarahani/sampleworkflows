@@ -1,0 +1,30 @@
+# Demonstrates passing data between jobs using job outputs and needs
+name: 04 - Job Outputs and Needs
+
+on:
+  push:                  # Run on code push
+  workflow_dispatch:     # Allow manual run
+
+jobs:
+  producer:
+    runs-on: ubuntu-latest   # Linux runner for producer job
+
+    outputs:
+      artifact_name: ${{ steps.meta.outputs.artifact_name }}  # Promote step output to job output
+
+    steps:
+      - name: Compute metadata
+        id: meta              # Step ID used to reference outputs
+        run: |
+          ART="artifact-${{ github.run_id }}-${{ github.ref_name }}"  # Build dynamic value
+          echo "artifact_name=$ART" >> "$GITHUB_OUTPUT"                # Define step output
+          echo "Produced artifact_name=$ART"                           # Log result
+
+  consumer:
+    runs-on: ubuntu-latest   # Separate runner for second job
+    needs: producer          # Run only after producer completes
+
+    steps:
+      - name: Read producer output
+        run: |
+          echo "Producer artifact_name = ${{ needs.producer.outputs.artifact_name }}"  # Read job output
