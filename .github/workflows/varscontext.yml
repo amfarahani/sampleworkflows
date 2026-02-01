@@ -8,6 +8,6 @@ jobs:
   vars_demo:
     runs-on: ubuntu-latest
     steps:
-      - name: Print vars context variable
+      - name: Print vars context variables
         run: |
           echo "APP_ENV from vars context = ${{ vars.APP_ENV }}"
