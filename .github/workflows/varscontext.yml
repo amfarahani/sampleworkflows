@@ -1,0 +1,13 @@
+name: 05 - vars Context
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  vars_demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print vars context variable
+        run: |
+          echo "APP_ENV from vars context = ${{ vars.APP_ENV }}"
