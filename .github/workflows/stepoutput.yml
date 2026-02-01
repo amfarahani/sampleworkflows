@@ -1,25 +1,26 @@
 name: 03 - Step Outputs
 
 on:
-  push:
-  workflow_dispatch:
+  push:                 # Run on every push
+  workflow_dispatch:    # Allow manual execution
 
 jobs:
   outputs_demo:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest   # Use a Linux runner
+
     steps:
       - name: Create an output value
-        id: makeval
+        id: makeval          # Step ID required to reference outputs
         run: |
           VALUE="build-${{ github.run_number }}-${{ github.sha }}"
-          echo "value=$VALUE" >> "$GITHUB_OUTPUT"
+          echo "value=$VALUE" >> "$GITHUB_OUTPUT"   # Define step output
           echo "Created output: $VALUE"
 
       - name: Use the output in a later step
         run: |
-          echo "Output was: ${{ steps.makeval.outputs.value }}"
+          echo "Output was: ${{ steps.makeval.outputs.value }}"  # Read step output
 
       - name: Show steps context now includes outputs
         env:
-          STEPS_CONTEXT: ${{ toJson(steps) }}
-        run: echo "$STEPS_CONTEXT"
+          STEPS_CONTEXT: ${{ toJson(steps) }}   # Convert steps context to JSON
+        run: echo "$STEPS_CONTEXT"               # Print steps context
