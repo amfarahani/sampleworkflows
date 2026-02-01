@@ -1,0 +1,25 @@
+name: 03 - Step Outputs
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  outputs_demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create an output value
+        id: makeval
+        run: |
+          VALUE="build-${{ github.run_number }}-${{ github.sha }}"
+          echo "value=$VALUE" >> "$GITHUB_OUTPUT"
+          echo "Created output: $VALUE"
+
+      - name: Use the output in a later step
+        run: |
+          echo "Output was: ${{ steps.makeval.outputs.value }}"
+
+      - name: Show steps context now includes outputs
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
