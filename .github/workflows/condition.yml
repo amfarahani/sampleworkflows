@@ -1,0 +1,18 @@
+name: 06 - Conditions with Context
+
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+jobs:
+  always:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This job runs on every push. Branch is ${{ github.ref_name }}."
+
+  main_only:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref_name == 'main' }}
+    steps:
+      - run: echo "This job runs only on main."
